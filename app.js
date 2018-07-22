@@ -15,6 +15,7 @@
     No cors required */
     app.use(express.static('../client'));
     app.use(bodyParser.json());  
+    app.use(express.static('uploads'));
 
     var storage = multer.diskStorage({ //multers disk storage settings
         destination: function (req, file, cb) {
@@ -42,6 +43,9 @@
         });
     });
 
+    app.get('/', function(req, res){
+        res.send('hello world');
+      });
     
 
     app.listen('3001', function(){
