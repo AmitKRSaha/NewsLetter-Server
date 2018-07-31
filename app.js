@@ -32,6 +32,29 @@
                 }).single('file');
 
     /** API path that will upload the files */
+    /** API path that will upload the files */
+    app.post('/uploadscreenshot', function (req, res) {
+        const path = 'uploads/screen.png'; 
+        var  body  =  "";  
+        req.on('data',  function  (chunk)  {    
+            body  +=  chunk;  
+        });  
+        req.on('end',  function  ()  {    
+            // console.log('body: '  +  body);  
+             
+            const base64Data =  body.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+            require('fs').writeFile(path, base64Data, 'base64', (err) => {
+                console.log(err);
+            });
+           
+        });    
+        res.json({
+            path: path,
+            error_code: 0,
+            err_desc: null
+        });
+    });
+
     app.post('/upload', function(req, res) {
         upload(req,res,function(err){
 			console.log(req.file);
