@@ -62,7 +62,7 @@
                  res.json({error_code:1,err_desc:err});
                  return;
             }
-             res.json({path:req.file.path, error_code:0,err_desc:null});
+             res.json({path:req.file.filename, filepath:req.file.path, error_code:0,err_desc:null});
         });
     });
 
