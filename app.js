@@ -14,9 +14,11 @@
     /** Serving from the same express Server
     No cors required */
     app.use(express.static('../client'));
-    app.use(bodyParser.json());  
+    // app.use(bodyParser.json());  
     app.use(express.static('uploads'));
     app.use('/uploads', express.static('uploads'))
+    app.use(bodyParser.json({limit: '50mb'}));
+    app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
     var storage = multer.diskStorage({ //multers disk storage settings
         destination: function (req, file, cb) {
@@ -35,20 +37,26 @@
     /** API path that will upload the files */
     /** API path that will upload the files */
     app.post('/uploadscreenshot', function (req, res) {
-        const path = 'uploads/screen.png'; 
-        var  body  =  "";  
-        req.on('data',  function  (chunk)  {    
-            body  +=  chunk;  
-        });  
-        req.on('end',  function  ()  {    
-            // console.log('body: '  +  body);  
-             
-            const base64Data =  body.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+        const path = 'uploads/'+ req.body.name +'.png'; 
+        // console.log('path: '  + req.body.canvas);  
+        var  body  = req.body.canvas;         
+           
+        const base64Data =  body.replace(/^data:([A-Za-z-+/]+);base64,/, '');
             require('fs').writeFile(path, base64Data, 'base64', (err) => {
                 console.log(err);
             });
+        // req.on('data',  function  (chunk)  {    
+        //     body  +=  chunk;  
+        // });  
+        // req.on('end',  function  ()  {    
+        //      console.log('body: '  +  body);  
+             
+        //     const base64Data =  body.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+        //     require('fs').writeFile(path, base64Data, 'base64', (err) => {
+        //         console.log(err);
+        //     });
            
-        });    
+        // });    
         res.json({
             path: path,
             error_code: 0,
